@@ -10,9 +10,6 @@ import h5py
 
 plt.style.use('http://stephenwilkins.co.uk/matplotlibrc.txt')
 
-import pandas as pd
-from astropy.table import Table
-from astropy.io import ascii, fits
 from synthesizer.filters import SVOFilterCollection
 import pysep.sep as sep
 import pysep.utils
@@ -81,5 +78,5 @@ if __name__ == '__main__':
 
             with h5py.File(cat_filename,'r') as hf:
 
-                
+
                 create_multiband_image(hf, imgs, filters, output_dir = output_dir, N = N)

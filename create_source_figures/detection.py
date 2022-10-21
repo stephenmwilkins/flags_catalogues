@@ -21,7 +21,7 @@ import pysep.analyse
 
 
 
-def create_significant_plots(hf, img, output_dir = None, N = None):
+def create_significance_plots(hf, img, output_dir = None, N = None):
 
     # --- select phtometry group
     photom = hf['photom']
@@ -82,4 +82,4 @@ if __name__ == '__main__':
 
             with h5py.File(cat_filename,'r') as hf:
 
-                create_significant_plots(hf, detection_image, output_dir = output_dir, N = N)
+                create_significance_plots(hf, detection_image, output_dir = output_dir, N = N)

@@ -11,6 +11,7 @@ if __name__ == '__main__':
 
     ceers_dir = '/Users/stephenwilkins/Dropbox/Research/data/images/jwst/ceers'  # this should be replaced by an environment variable or similar
 
+    subcat_name = '-highz'
     pointings = [1,2,3,6]
     pointings = [1]
     versions = ['0.2']
@@ -20,7 +21,7 @@ if __name__ == '__main__':
 
 
             catalogue_filename = f'{ceers_dir}/cats/CEERS_NIRCam{pointing}_v{version}.h5'
-            new_catalogue_filename = f'{ceers_dir}/cats/CEERS_NIRCam{pointing}_v{version}-colours.h5'
+            new_catalogue_filename = f'{ceers_dir}/cats/CEERS_NIRCam{pointing}_v{version}{subcat_name}.h5'
 
             with h5py.File(catalogue_filename,'r') as hf:
 

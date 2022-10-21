@@ -11,7 +11,7 @@ plt.style.use('http://stephenwilkins.co.uk/matplotlibrc.txt')
 
 
 
-def create_pz(hf, pz_types = ['ceers'], output_dir = None, N = None):
+def create_pz_plot(hf, pz_types = ['ceers'], output_dir = None, N = None):
 
     # --- select phtometry group
     photom = hf['photom']
@@ -73,4 +73,4 @@ if __name__ == '__main__':
             with h5py.File(output_filename,'r') as hf:
 
                 # create_SED(hf) # all
-                create_pz(hf, output_dir = output_dir, N = N)
+                create_pz_plot(hf, output_dir = output_dir, N = N)

@@ -15,7 +15,7 @@ from synthesizer.filters import SVOFilterCollection
 
 
 
-def create_SED(hf, output_dir = None, filters = None, N = None):
+def create_sed_plot(hf, output_dir = None, filters = None, N = None):
 
     # --- select phtometry group
     photom = hf['photom']
@@ -89,4 +89,4 @@ if __name__ == '__main__':
             with h5py.File(output_filename,'r') as hf:
 
                 # create_SED(hf) # all
-                create_SED(hf, output_dir = output_dir, filters = filters, N = N)
+                create_sed_plot(hf, output_dir = output_dir, filters = filters, N = N)
