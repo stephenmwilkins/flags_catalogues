@@ -16,6 +16,7 @@ def convert_ceers_to_hdf5(pointing, version, dir=''):
     ceers_photom = Table.read(f'{dir}/cats/CEERS_NIRCam{pointing}_v{version}_photom.fits')
     ceers_zphot = Table.read(f'{dir}/cats/CEERS_NIRCam{pointing}_v{version}_zphot.fits')
     ceers_pz = Table.read(f'{dir}/cats/CEERS_NIRCam{pointing}_v{version}_pz.fits')
+    ceers_grid = fits.open(f'{dir}/cats/CEERS_v{version}_photz_zgrid.fits')[0].data
 
     # print(ceers_photom.colnames)
     #
@@ -36,10 +37,10 @@ def convert_ceers_to_hdf5(pointing, version, dir=''):
         pz = hf.create_group('pz/ceers')
 
         for col in ceers_zphot.colnames:
-            pz[col] = ceers_zphot[col][0]  # need the "[0]" because of how the eazy values were saved
+            pz[col] = ceers_zphot[col]
 
-        pz['ZGRID'] = ceers_pz['ZGRID'][0]
-        pz['PZ'] = ceers_pz['PZ'][0]
+        pz['ZGRID'] = ceers_grid
+        pz['PZ'] = ceers_pz['PZ']
 
     return output_filename
 
@@ -47,10 +48,10 @@ def convert_ceers_to_hdf5(pointing, version, dir=''):
 if __name__ == '__main__':
 
     # this should be replaced by an environment variable or similar
-    ceers_dir = '/Users/stephenwilkins/Dropbox/Research/data/images/jwst/ceers'
+    ceers_dir = '/Users/jt458/ceers'
 
-    pointings = [1, 2, 3, 6]
-    versions = ['0.2']
+    pointings = np.arange(1,11)
+    versions = ['0.51.2']
 
     for pointing in pointings:
         for version in versions:
