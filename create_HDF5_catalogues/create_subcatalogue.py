@@ -7,15 +7,15 @@ from selections import criteria, CEERS
 
 if __name__ == '__main__':
 
-    ceers_dir = '/Users/stephenwilkins/Dropbox/Research/data/images/jwst/ceers'
+    ceers_dir = '/Users/jt458/ceers'
 
     # criteria_code = 'F22'
     criteria_code = 'high-z.v0.1'
 
     subcat_name = f'-{criteria_code}'
-    pointings = [1, 2, 3, 6]
-    # pointings = [1]
-    versions = ['0.2']
+    #pointings = np.arange(1,11)
+    pointings = [1]
+    versions = ['0.51.2']
 
     criteria_ = criteria[criteria_code]
 

@@ -2,25 +2,31 @@
 
 import numpy as np
 import h5py
-from flare.photom import flux_to_m
+from synthesizer.utils import flux_to_m
 
 from selections import criteria, CEERS
 
+# Example code of applying the selection functions.
 
+# Want to check if these sources satisfy the criteria.
+# Use the overall CEERS ID not the pointing specific one.
 F22_ids = {}
 F22_ids[1] = [1730, 1875, 3858, 3908, 3910, 4143, 5534, 6059, 7227, 8817]
+F22_ids[2] = [12000,13000]
 
 
 if __name__ == '__main__':
 
-    ceers_dir = '/Users/stephenwilkins/Dropbox/Research/data/images/jwst/ceers'
+    ceers_dir = '/Users/jt458/ceers'
 
-    # criteria_code = 'F22'
+    pointings = np.arange(1,3)
+    #pointings = [1]
+
+    versions = ['0.51.2']
+
+    # Choose selection criteria defined in selections.py
+    #criteria_code = 'F22'
     criteria_code = 'high-z.v0.1'
-    pointings = [1, 2, 3, 6]
-    pointings = [1]
-    versions = ['0.2']
-
     criteria_ = criteria[criteria_code]
 
     for pointing in pointings:
@@ -32,9 +38,11 @@ if __name__ == '__main__':
 
                 sel = CEERS(hf)
 
+                # Get selection array and number of sources.
                 s = sel.get_selection(criteria_)
 
-                # sel.check_sources(F22_ids[pointing])
+                # Check how given sources didn't pass the cut.
+                sel.check_sources(F22_ids[pointing])
 
 
 # CEERS1_1730  215.010022  53.013641  27.7  0.97  13.36  0.84  1.08  4.4

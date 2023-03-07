@@ -4,9 +4,9 @@ import numpy as np
 import h5py
 import operator as op
 
-from flare.photom import flux_to_m, m_to_flux
+from synthesizer.utils import flux_to_m, m_to_flux
 
-
+# Have removed spurious for now as doesn't exist in catalogue until visual checks.
 criteria = {}
 criteria['F22'] = [
     ('pz/ceers/INT_ZGT7', op.gt, 0.7),
@@ -15,18 +15,16 @@ criteria['F22'] = [
     ('dchi2', op.gt, 4),
     ('nd_det', op.gt, 2),
     ('nd_opt3', op.eq, 0),
-    ('spurious', op.eq, 0),
 ]
 
 
 criteria['high-z.v0.1'] = [
-    ('photom/F277', op.gt, m_to_flux(28.5)),
+    ('photom/FLUX_277', op.gt, m_to_flux(28.5)),
     ('pz/ceers/INT_ZGT4', op.gt, 0.9),
     ('pz/ceers/ZA', op.gt, 4.5),
     ('pz/ceers/CHIA', op.lt, 60),
     ('nd_det', op.gt, 4),
     ('nd_opt3', op.eq, 0),
-    ('spurious', op.eq, 0),
 ]
 
 
@@ -49,19 +47,19 @@ class CEERS:
 
         # --- calculate the signal-to-noise in each of the bands
         ai = 3  # aperture index
-        sn = {f: hf['photom/'+f+'_APER'][:, ai]/hf['photom/D'+f+'_APER'][:, ai]
-              for f in ['F606', 'F814', 'F115', 'F150', 'F200', 'F277', 'F356', 'F444']}
+        sn = {f: hf['photom/FLUX_'+f+'_APER'][:, ai]/hf['photom/FLUXERR_'+f+'_APER'][:, ai]
+              for f in ['606', '814', '115', '150', '200', '277', '356', '444']}
 
         # --- calculate the number of bands where S/N>5.5
         sn_det = np.array([sn[f] > 5.5
-                           for f in ['F115', 'F150', 'F200', 'F277', 'F356', 'F444']])  # for every galaxies this looks like [True, True, True, False, False, False] depending whether the condition is met.
+                           for f in ['115', '150', '200', '277', '356', '444']])  # for every galaxies this looks like [True, True, True, False, False, False] depending whether the condition is met.
 
         # this sums the above, i.e. True = 1, False = 0. Thus this tells us how many bands are detected at S/N>5.5
         self.cat['nd_det'] = np.sum(sn_det, axis=0)
 
         # --- calculate where S/N>3 to remove objects with detections in bands below the Lyman-break
         sn_opt3 = np.array([sn[f] > 3.0
-                           for f in ['F606', 'F814', 'F115', 'F150']])  # for every galaxies this looks like [True, True, True, False, False, False] depending whether the condition is met.
+                           for f in ['606', '814', '115', '150']])  # for every galaxies this looks like [True, True, True, False, False, False] depending whether the condition is met.
 
         # this sums the above, i.e. True = 1, False = 0. Thus this tells us how many bands are detected at S/N>5.5
 
@@ -74,7 +72,7 @@ class CEERS:
 
         # --- calculate where S/N>3 to remove objects with detections in bands below the Lyman-break
         sn_opt2 = np.array([sn[f] > 2.0
-                           for f in ['F606', 'F814', 'F115', 'F150']])  # for every galaxies this looks like [True, True, True, False, False, False] depending whether the condition is met.
+                           for f in ['606', '814', '115', '150']])  # for every galaxies this looks like [True, True, True, False, False, False] depending whether the condition is met.
 
         # this sums the above, i.e. True = 1, False = 0. Thus this tells us how many bands are detected at S/N>5.5
 
@@ -85,7 +83,8 @@ class CEERS:
 
         self.cat['nd_opt2'] = np.sum(sn_opt2, axis=0)
 
-        self.cat['dchi2'] = self.pz['CHI2_LOW'][:] - self.pz['CHI2_HI'][:]
+        #CHI2_HI is not in the new catalogues. Using CHIA for now.
+        self.cat['dchi2'] = self.pz['CHI2_LOW'][:] - self.pz['CHIA'][:]
 
         self.s_ = np.ones(len(self.za), dtype=bool)
         self.s = self.s_
@@ -135,7 +134,7 @@ class CEERS:
 
         for id in missing:
 
-            i = id-1
+            i = list(self.p['ID'][:]).index(id)
 
             print(self.p['ID'][i], '-'*10)
 
@@ -149,7 +148,3 @@ class CEERS:
                     value = self.hf[p][i]
 
                 print(p, op, c, '|', f'{value:.2f}', op(value, c))
-
-
-#
-# if __name__ == '__main__':
