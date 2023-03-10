@@ -13,8 +13,8 @@ if __name__ == '__main__':
     criteria_code = 'high-z.v0.1'
 
     subcat_name = f'-{criteria_code}'
-    #pointings = np.arange(1,11)
-    pointings = [1]
+    pointings = np.arange(1,11)
+    #pointings = [1]
     versions = ['0.51.2']
 
     criteria_ = criteria[criteria_code]

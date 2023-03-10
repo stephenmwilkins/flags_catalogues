@@ -7,11 +7,11 @@ from selections import criteria, CEERS
 
 if __name__ == '__main__':
 
-    ceers_dir = '/Users/stephenwilkins/Dropbox/Research/data/images/jwst/ceers'
+    ceers_dir = '/Users/jt458/ceers'
 
-    pointings = [1, 2, 3, 6]
-    # pointings = [1]
-    versions = ['0.2']
+    #pointings = np.arange(1,11)
+    pointings = [1,2]
+    versions = ['0.51.2']
 
     for pointing in pointings:
         for version in versions:
@@ -23,15 +23,17 @@ if __name__ == '__main__':
 
             catalogue_filename = f'{catalogue_id}.h5'
 
-            spurious_list = np.loadtxt(f'{catalogue_id}-spurious.dat', dtype=int)
+            spurious_list = list(np.loadtxt(f'{catalogue_id}-spurious.dat', dtype=int))
 
-            spurious_ids = list(spurious_list-1)
+            #spurious_ids = list(spurious_list-1)
 
-            print(spurious_ids)
+            #print(spurious_ids)
 
             with h5py.File(catalogue_filename, 'a') as hf:
 
                 # hf.visit(print)
+
+                spurious_ids = [list(hf['photom/ID'][:]).index(id) for id in spurious_list]
 
                 if 'spurious' in hf.keys():
                     del hf['spurious']

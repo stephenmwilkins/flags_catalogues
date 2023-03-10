@@ -8,17 +8,17 @@ from selections import criteria, CEERS
 
 if __name__ == '__main__':
 
-    ceers_dir = '/Users/stephenwilkins/Dropbox/Research/data/images/jwst/ceers'
+    ceers_dir = '/Users/jt458/ceers'
 
-    pointings = [1, 2, 3, 6]
-    # pointings = [1]
-    versions = ['0.2']
+    pointings = np.arange(1,11)
+    #pointings = [1]
+    versions = ['0.51.2']
 
     tolerance_arcsec = 0.15
     tolerance_deg = tolerance_arcsec/3600.
 
     # --- specz catalogue
-    specz_catalogue_name = f'{ceers_dir}/cats/egs_specz_0822.txt'
+    specz_catalogue_name = f'{ceers_dir}/cats/egs_specz_0822.ascii'
     specz_catalogue = ascii.read(specz_catalogue_name)
     # print(specz_catalogue)
 

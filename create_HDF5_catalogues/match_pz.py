@@ -8,15 +8,17 @@ from astropy.table import Table
 
 from selections import criteria, CEERS
 
+
+# Not 100% convinced this is working correctly yet.
 if __name__ == '__main__':
 
     """ matches with other catalogues """
 
-    ceers_dir = '/Users/stephenwilkins/Dropbox/Research/data/images/jwst/ceers'
+    ceers_dir = '/Users/jt458/ceers'
 
-    pointings = [1, 2, 3, 6]
-    # pointings = [1]
-    versions = ['0.2']
+    pointings = np.arange(1,11)
+    #pointings = [2]
+    versions = ['0.51.2']
 
     tolerance_arcsec = 0.15
     tolerance_deg = tolerance_arcsec/3600.
