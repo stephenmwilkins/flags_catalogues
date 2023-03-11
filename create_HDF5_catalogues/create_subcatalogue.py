@@ -39,12 +39,12 @@ def create_subcatalogue(survey, version, pointing, code):
 
         hfn.close()
 
-if __name__ == '__main__':
+#if __name__ == '__main__':
 
-    pointings = np.arange(1,11)
-    version = '0.51.2'
-    survey = 'CEERS'
-    code = 'high-z.v0.1'
+    #pointings = np.arange(1,11)
+    #version = '0.51.2'
+    #survey = 'CEERS'
+    #code = 'high-z.v0.1'
 
-    for pointing in pointings:
-        create_subcatalogue(survey, version, pointing, code)
+    #for pointing in pointings:
+        #create_subcatalogue(survey, version, pointing, code)

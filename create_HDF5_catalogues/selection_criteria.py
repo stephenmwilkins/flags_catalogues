@@ -162,8 +162,8 @@ class NGDEEP:
 
         self.za = self.pz['ZA'][:]
 
-        criteria = {}
-        criteria['high-z.v0.1'] = [
+        self.criteria = {}
+        self.criteria['high-z.v0.1'] = [
             ('photom/FLUX_277', op.gt, m_to_flux(28.5)),
             ('pz/ngdeep/INT_ZGT4', op.gt, 0.9),
             ('pz/ngdeep/ZA', op.gt, 4.5),

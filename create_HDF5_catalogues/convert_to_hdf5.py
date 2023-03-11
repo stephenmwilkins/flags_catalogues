@@ -37,11 +37,11 @@ def convert_to_hdf5(survey, version, pointing):
 
     return output_filename
 
-if __name__ == '__main__':
+#if __name__ == '__main__':
 
-    survey = 'CEERS'
-    version = '0.51.2'
-    pointings = np.arange(1,11)
+    #survey = 'CEERS'
+    #version = '0.51.2'
+    #pointings = np.arange(1,11)
 
-    for pointing in pointings:
-        convert_to_hdf5(survey, version, pointing)
+    #for pointing in pointings:
+        #convert_to_hdf5(survey, version, pointing)

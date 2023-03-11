@@ -67,10 +67,10 @@ def match_specz(survey, version, pointing, tolerance_arcsec = 0.15):
         hf.flush()
         hf.visit(print)
 
-if __name__ == '__main__':
-    survey = 'CEERS'
-    version = '0.51.2'
-    pointings = np.arange(1,11)
+#if __name__ == '__main__':
+    #survey = 'CEERS'
+    #version = '0.51.2'
+    #pointings = np.arange(1,11)
 
-    for pointing in pointings:
-        match_specz(survey, version, pointing) 
+    #for pointing in pointings:
+        #match_specz(survey, version, pointing) 
