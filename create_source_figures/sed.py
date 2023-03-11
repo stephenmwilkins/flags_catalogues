@@ -9,6 +9,7 @@ import h5py
 
 plt.style.use('http://stephenwilkins.co.uk/matplotlibrc.txt')
 
+# This doesn't seem to exist.
 from synthesizer.filters import SVOFilterCollection
 
 

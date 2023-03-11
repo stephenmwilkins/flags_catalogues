@@ -14,8 +14,8 @@ def convert_ceers_to_hdf5(pointing, version, dir=''):
 
     # --- open catalogues to include
     ceers_photom = Table.read(f'{dir}/cats/CEERS_NIRCam{pointing}_v{version}_photom.fits')
-    ceers_zphot = Table.read(f'{dir}/cats/CEERS_NIRCam{pointing}_v{version}_zphot.fits')
-    ceers_pz = Table.read(f'{dir}/cats/CEERS_NIRCam{pointing}_v{version}_pz.fits')
+    ceers_zphot = Table.read(f'{dir}/cats/CEERS_NIRCam{pointing}_v{version}_photz_quantities.fits')
+    ceers_pz = Table.read(f'{dir}/cats/CEERS_NIRCam{pointing}_v{version}_photz_pz.fits')
     ceers_grid = fits.open(f'{dir}/cats/CEERS_v{version}_photz_zgrid.fits')[0].data
 
     # print(ceers_photom.colnames)

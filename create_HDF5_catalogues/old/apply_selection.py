@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
     # Choose selection criteria defined in selections.py
     #criteria_code = 'F22'
-    criteria_code = 'high-z.v0.1'
+    criteria_code = 'CEERS-high-z.v0.1'
     criteria_ = criteria[criteria_code]
 
     for pointing in pointings:

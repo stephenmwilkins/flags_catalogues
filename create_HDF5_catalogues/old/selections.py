@@ -8,7 +8,7 @@ from synthesizer.utils import flux_to_m, m_to_flux
 
 # Have removed spurious for now as doesn't exist in catalogue until visual checks.
 criteria = {}
-criteria['F22'] = [
+criteria['CEERS-F22'] = [
     ('pz/ceers/INT_ZGT7', op.gt, 0.7),
     ('pz/ceers/ZA', op.gt, 8.5),
     ('pz/ceers/CHIA', op.lt, 60),
@@ -18,13 +18,21 @@ criteria['F22'] = [
 ]
 
 
-criteria['high-z.v0.1'] = [
+criteria['CEERS-high-z.v0.1'] = [
     ('photom/FLUX_277', op.gt, m_to_flux(28.5)),
     ('pz/ceers/INT_ZGT4', op.gt, 0.9),
     ('pz/ceers/ZA', op.gt, 4.5),
     ('pz/ceers/CHIA', op.lt, 60),
     ('nd_det', op.gt, 4),
     ('nd_opt3', op.eq, 0),
+]
+
+criteria['NGDEEP-high-z.v0.1'] = [
+    ('photom/FLUX_277', op.gt, m_to_flux(28.5)),
+    ('pz/ngdeep/INT_ZGT4', op.gt, 0.9),
+    ('pz/ngdeep/ZA', op.gt, 4.5),
+    ('pz/ngdeep/CHIA', op.lt, 60),
+    ('nd_det', op.gt, 4),
 ]
 
 
@@ -103,6 +111,86 @@ class CEERS:
     #     self.s = s
     #
     #     return s
+
+    def get_selection(self, criteria_list):
+
+        self.criteria_list = criteria_list
+        s = self.s_
+
+        for criteria in criteria_list:
+            p, op, c = criteria
+
+            if p in self.cat.keys():
+
+                s = s & op(self.cat[p], c)
+
+            else:
+
+                s = s & op(self.hf[p][:], c)
+
+        self.s = s
+
+        print(f'number of sources selected: {np.sum(s)}')
+
+        return s
+
+    def check_sources(self, ids):
+
+        missing = list(set(ids) - set(self.p['ID'][self.s]))
+
+        print('missing IDs:', missing)
+
+        for id in missing:
+
+            i = list(self.p['ID'][:]).index(id)
+
+            print(self.p['ID'][i], '-'*10)
+
+            for criteria in self.criteria_list:
+
+                p, op, c = criteria
+
+                if p in self.cat.keys():
+                    value = self.cat[p][i]
+                else:
+                    value = self.hf[p][i]
+
+                print(p, op, c, '|', f'{value:.2f}', op(value, c))
+
+class NGDEEP:
+
+    """ selection criteria relevant for NGDEEP """
+
+    def __init__(self, hf):
+
+        self.hf = hf
+
+        self.cat = {}
+
+        self.p = hf['photom']  # photometry group
+        self.pz = hf['pz/ngdeep']  # photometric redshift group
+
+        self.za = self.pz['ZA'][:]
+
+        # ---------------- ADD SELECTION CRITERIA HERE
+
+        # --- calculate the signal-to-noise in each of the bands
+        ai = 3  # aperture index
+        sn = {f: hf['photom/FLUX_'+f+'_APER'][:, ai]/hf['photom/FLUXERR_'+f+'_APER'][:, ai]
+              for f in ['814', '115', '150', '200', '277', '356', '444']}
+
+        # --- calculate the number of bands where S/N>5.5
+        sn_det = np.array([sn[f] > 5.5
+                           for f in ['115', '150', '200', '277', '356', '444']])  # for every galaxies this looks like [True, True, True, False, False, False] depending whether the condition is met.
+
+        # this sums the above, i.e. True = 1, False = 0. Thus this tells us how many bands are detected at S/N>5.5
+        self.cat['nd_det'] = np.sum(sn_det, axis=0)
+
+        #CHI2_HI is not in the new catalogues. Using CHIA for now.
+        self.cat['dchi2'] = self.pz['CHI2_LOW'][:] - self.pz['CHIA'][:]
+
+        self.s_ = np.ones(len(self.za), dtype=bool)
+        self.s = self.s_
 
     def get_selection(self, criteria_list):
 

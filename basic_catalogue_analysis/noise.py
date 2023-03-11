@@ -1,5 +1,5 @@
 
-from synthesizer.filters import SVOFilterCollection
+#from synthesizer.filters import SVOFilterCollection
 from pathlib import Path
 import numpy as np
 import matplotlib as mpl
@@ -8,7 +8,7 @@ import matplotlib.cm as cm
 import numpy as np
 import h5py
 
-from flare_lf.utilities import m_to_fnu, fnu_to_m
+from synthesizer.utils import flux_to_m, m_to_flux
 
 plt.style.use('http://stephenwilkins.co.uk/matplotlibrc.txt')
 
@@ -16,11 +16,11 @@ plt.style.use('http://stephenwilkins.co.uk/matplotlibrc.txt')
 if __name__ == '__main__':
 
     # this should be replaced by an environment variable or similar
-    ceers_dir = '/Users/stephenwilkins/Dropbox/Research/data/images/jwst/ceers'
+    ceers_dir = '/Users/jt458/ceers'
 
     pointing = 1
-    version = '0.2'
-    filter = 'F277'
+    version = '0.51.2'
+    filter = '277'
 
     catalogue_filename = f'{ceers_dir}/cats/CEERS_NIRCam{pointing}_v{version}.h5'
 
@@ -42,15 +42,15 @@ if __name__ == '__main__':
         # if not filters:
         # --- figure out a way to automaticall get the filters. This may require using an attribute in the HDF5 file
 
-        flux = photom[filter+'_APER'][:]
-        flux_err = photom['D'+filter+'_APER'][:]
+        flux = photom[f'FLUX_{filter}_APER'][:]
+        flux_err = photom[f'FLUXERR_{filter}_APER'][:]
 
-        flux = photom[filter][:]
-        flux_err = photom['D'+filter][:]
+        flux = photom[f'FLUX_{filter}'][:]
+        flux_err = photom[f'FLUXERR_{filter}'][:]
 
         ax.scatter(np.log10(flux), np.log10(flux_err), s=1, alpha=0.1)
 
-        noise = m_to_fnu(28.5)/5.
+        noise = m_to_flux(28.5)/5.
 
         ax.axhline(np.log10(noise))
 

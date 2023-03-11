@@ -32,8 +32,8 @@ def split_ceers_catalogue(version, dir = ''):
         
         # Names match June2022 catalogue format.
         photom_.write(f'{dir}/cats/CEERS_NIRCam{pointing}_v{version}_photom.fits', format = 'fits', overwrite = True)
-        zphot_.write(f'{dir}/cats/CEERS_NIRCam{pointing}_v{version}_zphot.fits', format = 'fits', overwrite = True)
-        pz_.write(f'{dir}/cats/CEERS_NIRCam{pointing}_v{version}_pz.fits', format = 'fits', overwrite = True)
+        zphot_.write(f'{dir}/cats/CEERS_NIRCam{pointing}_v{version}_photz_quantities.fits', format = 'fits', overwrite = True)
+        pz_.write(f'{dir}/cats/CEERS_NIRCam{pointing}_v{version}_photz_pz.fits', format = 'fits', overwrite = True)
 
 
 if __name__ == '__main__':
