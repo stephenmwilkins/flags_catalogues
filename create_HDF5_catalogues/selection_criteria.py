@@ -1,12 +1,9 @@
-
-
 import numpy as np
 import h5py
 import operator as op
-
 from synthesizer.utils import flux_to_m, m_to_flux
 
-# Have removed spurious for now as doesn't exist in catalogue until visual checks.
+# Define a new class for each survey with the relevant selection criteria and functions.
 
 class CEERS:
 
@@ -18,11 +15,11 @@ class CEERS:
 
         self.cat = {}
 
-        self.p = hf['photom']  # photometry group
-        self.pz = hf['pz/ceers']  # photometric redshift group
-
+        self.p = hf['photom'] # Photmetry group
+        self.pz = hf['pz/ceers'] # Photometric redshift group
         self.za = self.pz['ZA'][:]
 
+        # ---------------- Define different criteria here ----------------
         self.criteria = {}
         self.criteria['F22'] = [
             ('pz/ceers/INT_ZGT7', op.gt, 0.7),
@@ -40,8 +37,7 @@ class CEERS:
             ('nd_det', op.gt, 4),
             ('nd_opt3', op.eq, 0),
         ]
-
-        # ---------------- ADD SELECTION CRITERIA HERE
+        # ---------------- Include calculations required for criteria here ----------------
 
         # --- calculate the signal-to-noise in each of the bands
         ai = 3  # aperture index
@@ -87,20 +83,7 @@ class CEERS:
         self.s_ = np.ones(len(self.za), dtype=bool)
         self.s = self.s_
 
-    # def F22(self):
-    #
-    #     s = (self.pz['INT_ZGT7'][:] > 0.7)
-    #     s = s & (self.za > 8.5)
-    #     s = s & (self.pz['CHIA'][:] < 60)
-    #     s = s & (self.cat['dchi2'] > 4)
-    #     # ensure that objects detected in at least two relevant bands
-    #     s = s & (self.cat['nd_det'] > 2)
-    #     # ensure no objects are detected (at S/N>3) in the bands below the Lyman-break
-    #     s = s & (self.cat['nd_opt3'] == 0)
-    #
-    #     self.s = s
-    #
-    #     return s
+# ---------------- Functions required for each survey ----------------
 
     def get_selection(self, criteria_list):
 
@@ -157,11 +140,11 @@ class NGDEEP:
 
         self.cat = {}
 
-        self.p = hf['photom']  # photometry group
-        self.pz = hf['pz/ngdeep']  # photometric redshift group
-
+        self.p = hf['photom']  # Photometry group
+        self.pz = hf['pz/ngdeep']  # Photometric redshift group
         self.za = self.pz['ZA'][:]
 
+        # ---------------- Define different criteria here ----------------
         self.criteria = {}
         self.criteria['high-z.v0.1'] = [
             ('photom/FLUX_277', op.gt, m_to_flux(28.5)),
@@ -170,8 +153,7 @@ class NGDEEP:
             ('pz/ngdeep/CHIA', op.lt, 60),
             ('nd_det', op.gt, 4),
 ]
-
-        # ---------------- ADD SELECTION CRITERIA HERE
+        # ---------------- Include calculations required for criteria here ----------------
 
         # --- calculate the signal-to-noise in each of the bands
         ai = 3  # aperture index
@@ -190,6 +172,8 @@ class NGDEEP:
 
         self.s_ = np.ones(len(self.za), dtype=bool)
         self.s = self.s_
+
+# ---------------- Functions required for each survey ----------------
 
     def get_selection(self, criteria_list):
 
