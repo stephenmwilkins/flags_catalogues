@@ -3,7 +3,7 @@ from astropy.table import Table
 from astropy.io import fits
 
 def prepare_ceers_catalogue(version, dir = ''):
-    """Splits the full CEERS catalogue into catalogues for different pointings."""
+    """Take the CEERS catalogues and convert them to a more appropriate format"""
 
     # Open catalogues to include.
     photom = Table.read(f'{dir}/cats/CEERS_v{version}_photom.fits')
@@ -13,7 +13,7 @@ def prepare_ceers_catalogue(version, dir = ''):
 
     pointings = np.arange(1,11)
 
-    # Create new set of tables for each pointing.
+    # Create new set of tables for each pointing to match original layout.
     for pointing in pointings:
     
         photom_ = Table()
@@ -38,6 +38,7 @@ def prepare_ceers_catalogue(version, dir = ''):
         print(f'Split pointing {pointing}')
 
 def prepare_ngdeep_catalogue(version, dir = ''):
+    """Take the NGDEEP catalogues and convert them to a more appropriate format"""
 
     photom = Table.read(f'{dir}/cats/NGDEEP_v{version}_photom.fits')
     zphot = Table.read(f'{dir}/cats/NGDEEP_v{version}_photz_quantities.fits')
@@ -49,6 +50,7 @@ def prepare_ngdeep_catalogue(version, dir = ''):
         pz_ = Table()
         pz_['PZ'] = pz
 
+        # Name to match CEERS June2022 format. For convinience.
         photom.write(f'{dir}/cats/NGDEEP_NIRCam{pointing}_v{version}_photom.fits', format = 'fits', overwrite = True)
         zphot.write(f'{dir}/cats/NGDEEP_NIRCam{pointing}_v{version}_photz_quantities.fits', format = 'fits', overwrite = True)
         pz_.write(f'{dir}/cats/NGDEEP_NIRCam{pointing}_v{version}_photz_pz.fits', format = 'fits', overwrite = True)     

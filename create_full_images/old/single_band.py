@@ -15,7 +15,7 @@ def create_single_band_image(filter, pointing, version):
 
     filter_ = filter.split('.')[-1].lower()
 
-    image_filename = f'{ceers_dir}/images/{version}/ceers_nircam{pointing}_{filter_}_sci_bkgsub.fits'
+    image_filename = f'{ceers_dir}/images/ceers_nircam{pointing}_{filter_}_sci_bkgsub_v{version}.fits'
 
     hdu = fits.open(image_filename)
     image = hdu[0].data  # 1 = science,
@@ -38,16 +38,16 @@ def create_single_band_image(filter, pointing, version):
 
     ax.set_axis_off()
 
-    fig.savefig(f'{ceers_dir}/myimages/{version}/ceers_nircam{pointing}_{filter_}_v{version}.png')
+    fig.savefig(f'{ceers_dir}/myimages/ceers_nircam{pointing}_{filter_}_v{version}.png')
 
 
 if __name__ == '__main__':
 
     # this should be replaced by an environment variable or similar
-    ceers_dir = '/Users/stephenwilkins/Dropbox/Research/data/images/jwst/ceers'
+    ceers_dir = '/Users/jt458/ceers'
 
-    pointings = [3, 6]
-    versions = ['0.2']
+    pointings = [4]
+    versions = ['0.51.2']
 
     filters = []
     filters += [f'JWST/NIRCam.{f}' for f in ['F115W',

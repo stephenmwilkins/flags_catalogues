@@ -1,7 +1,7 @@
 
 
 from PIL import Image
-from synthesizer.filters import SVOFilterCollection
+from synthesizer.filters import FilterCollection
 from pathlib import Path
 import numpy as np
 import matplotlib as mpl
@@ -102,10 +102,12 @@ def create_multiimage(hf, imgs, filters_, output_dir=None, size=50, N=None):
 if __name__ == '__main__':
 
     # this should be replaced by an environment variable or similar
-    ceers_dir = '/Users/stephenwilkins/Dropbox/Research/data/images/jwst/ceers'
+    ceers_dir = '/Users/jt458/ceers'
 
-    pointings = [1]
-    versions = ['0.2']
+    pointings = [4]
+    #pointings = np.arange(1,11)
+    versions = ['0.51.2']
+
     subcat = '-F22'
     # N = 10  # testing purposes
     N = 1

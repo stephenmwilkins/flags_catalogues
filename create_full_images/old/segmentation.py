@@ -14,7 +14,7 @@ def create_segmentation_image(pointing, version, add_sources=False):
 
     # norm = mpl.colors.Normalize(vmin=0., vmax=10.)
 
-    image_filename = f'{ceers_dir}/images/{version}/ceers_nircam{pointing}_segmap_v{version}.fits'
+    image_filename = f'{ceers_dir}/images/ceers_nircam{pointing}_segmap_v{version}.fits'
 
     hdu = fits.open(image_filename)
 
@@ -37,16 +37,16 @@ def create_segmentation_image(pointing, version, add_sources=False):
     ax.imshow(np.ma.masked_where(image == 0, image), cmap=cmap, origin='lower')
 
     fig.savefig(
-        f'{ceers_dir}/myimages/{version}/ceers_nircam{pointing}_segmap.png')
+        f'{ceers_dir}/myimages/ceers_nircam{pointing}_segmap_v{version}.png')
 
 
 if __name__ == '__main__':
 
     # this should be replaced by an environment variable or similar
-    ceers_dir = '/Users/stephenwilkins/Dropbox/Research/data/images/jwst/ceers'
+    ceers_dir = '/Users/jt458/ceers'
 
-    pointings = [2, 3, 6]
-    versions = ['0.2']
+    pointings = [4]
+    versions = ['0.51.2']
 
     for pointing in pointings:
         for version in versions:

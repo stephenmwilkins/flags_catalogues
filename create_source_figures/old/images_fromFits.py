@@ -10,7 +10,7 @@ import h5py
 
 plt.style.use('http://stephenwilkins.co.uk/matplotlibrc.txt')
 
-from synthesizer.filters import SVOFilterCollection
+from synthesizer.filters import FilterCollection
 import pysep.sep as sep
 import pysep.utils
 import pysep.plots.image
@@ -48,10 +48,11 @@ def create_multiband_image(hf, imgs, filters, output_dir = None, size = 50, N = 
 if __name__ == '__main__':
 
 
-    ceers_dir = '/Users/stephenwilkins/Dropbox/Research/data/images/jwst/ceers'  # this should be replaced by an environment variable or similar
+    ceers_dir = '/Users/jt458/ceers'  # this should be replaced by an environment variable or similar
 
-    pointings = [1]
-    versions = ['0.2']
+    pointings = [4]
+    #pointings = np.arange(1,11)
+    versions = ['0.51.2']
     N = 10 # testing purposes
 
     filters = []
@@ -77,6 +78,5 @@ if __name__ == '__main__':
             cat_filename = f'{ceers_dir}/cats/CEERS_NIRCam{pointing}_v{version}.h5'
 
             with h5py.File(cat_filename,'r') as hf:
-
 
                 create_multiband_image(hf, imgs, filters, output_dir = output_dir, N = N)

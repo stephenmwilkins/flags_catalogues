@@ -8,7 +8,7 @@ import matplotlib.cm as cm
 import h5py
 from PIL import Image
 
-from synthesizer.filters import SVOFilterCollection
+from synthesizer.filters import FilterCollection
 
 
 from images import create_image, create_multiimage

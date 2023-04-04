@@ -9,11 +9,7 @@ import h5py
 
 plt.style.use('http://stephenwilkins.co.uk/matplotlibrc.txt')
 
-# This doesn't seem to exist.
-from synthesizer.filters import SVOFilterCollection
-
-
-
+from synthesizer.filters import FilterCollection
 
 
 def create_sed_plot(hf, output_dir = None, filters = None, N = None):
@@ -24,10 +20,11 @@ def create_sed_plot(hf, output_dir = None, filters = None, N = None):
     # if not filters:
         # --- figure out a way to automaticall get the filters. This may require using an attribute in the HDF5 file
 
-    fc = SVOFilterCollection(filters)
+    fc = FilterCollection(filters)
 
-    filters_ = [f.split('.')[-1][:-1] for f in filters] # conversion from SVO (our) filter names to CEERS convention
-    wavelengths = np.array([fc.filter[f].pivwv()/1E4 for f in filters])
+    filters_ = [f.split('.')[-1][1:-1] for f in filters] # conversion from SVO (our) filter names to CEERS convention
+
+    wavelengths = np.array([fc.filters[f].pivwv()/1E4 for f in filters])
 
     if N:
         ids = photom['ID'][:N] # useful for testing
@@ -46,8 +43,8 @@ def create_sed_plot(hf, output_dir = None, filters = None, N = None):
 
         ax = fig.add_axes((left, bottom, width, height))
 
-        fluxes = np.array([photom[f][i] for f in filters_])
-        flux_errors = np.array([photom['D'+f][i] for f in filters_])
+        fluxes = np.array([photom['FLUX_'+f][i] for f in filters_])
+        flux_errors = np.array([photom['FLUXERR_'+f][i] for f in filters_])
 
         ax.errorbar(wavelengths, fluxes, yerr =flux_errors, fmt = 'o', c = 'k', ms = 2, lw=1)
 
@@ -60,16 +57,13 @@ def create_sed_plot(hf, output_dir = None, filters = None, N = None):
         print(fn)
         fig.savefig(fn)
 
-
-
 if __name__ == '__main__':
 
+    ceers_dir = '/Users/jt458/ceers'  # this should be replaced by an environment variable or similar
 
-    ceers_dir = '/Users/stephenwilkins/Dropbox/Research/data/images/jwst/ceers'  # this should be replaced by an environment variable or similar
-
-    pointings = [1,2,3,6]
+    #pointings = np.arange(1,11)
     pointings = [1]
-    versions = ['0.2']
+    versions = ['0.51.2']
     N = 10 # testing purposes
 
     filters = []
@@ -88,6 +82,5 @@ if __name__ == '__main__':
             output_filename = f'{ceers_dir}/cats/CEERS_NIRCam{pointing}_v{version}.h5'
 
             with h5py.File(output_filename,'r') as hf:
-
                 # create_SED(hf) # all
                 create_sed_plot(hf, output_dir = output_dir, filters = filters, N = N)

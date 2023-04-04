@@ -46,17 +46,14 @@ def create_pz_plot(hf, pz_types = ['ceers'], output_dir = None, N = None):
         print(fn)
         fig.savefig(fn)
 
-
-
-
-
 if __name__ == '__main__':
 
 
-    ceers_dir = '/Users/stephenwilkins/Dropbox/Research/data/images/jwst/ceers'  # this should be replaced by an environment variable or similar
+    ceers_dir = '/Users/jt458/ceers'  # this should be replaced by an environment variable or similar
 
     pointings = [1]
-    versions = ['0.2']
+    #pointings = np.arange(1,11)
+    versions = ['0.51.2']
     N = 10 # testing purposes
 
 

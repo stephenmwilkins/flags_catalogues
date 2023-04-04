@@ -4,9 +4,10 @@ import h5py
 from selection_criteria import CEERS, NGDEEP
 
 def create_subcatalogue(survey, version, pointing, code):
+    '''Create a subcatalogue based on one of the defined selction criteria'''
 
     survey = survey.upper()
-    survey_list = {'CEERS':CEERS, 'NGDEEP':NGDEEP}
+    survey_list = {'CEERS':CEERS, 'NGDEEP':NGDEEP} # Include desired surveys here as shown.
 
     survey_dir = f'/Users/jt458/{survey.lower()}'
 
@@ -19,12 +20,14 @@ def create_subcatalogue(survey, version, pointing, code):
 
     with h5py.File(catalogue_filename, 'r') as hf:
 
+        # Get the selection array.
         sel = survey_list[survey](hf)
 
         criteria_ = sel.criteria[code]
 
         s = sel.get_selection(criteria_)
 
+        # Create new subcatalogue.
         hfn = h5py.File(new_catalogue_filename, 'w')
 
         def make_copy(name, item):
@@ -38,13 +41,3 @@ def create_subcatalogue(survey, version, pointing, code):
         hf.visititems(make_copy)
 
         hfn.close()
-
-#if __name__ == '__main__':
-
-    #pointings = np.arange(1,11)
-    #version = '0.51.2'
-    #survey = 'CEERS'
-    #code = 'high-z.v0.1'
-
-    #for pointing in pointings:
-        #create_subcatalogue(survey, version, pointing, code)

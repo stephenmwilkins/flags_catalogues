@@ -8,10 +8,9 @@ from selections import criteria, CEERS
 if __name__ == '__main__':
 
     ceers_dir = '/Users/jt458/ceers'
-
     #pointings = np.arange(1,11)
-    pointings = [1,2]
-    versions = ['0.51.2']
+    pointings = [1,2,3,6]
+    versions = ['0.2']
 
     for pointing in pointings:
         for version in versions:
@@ -21,7 +20,7 @@ if __name__ == '__main__':
 
             catalogue_id = f'{ceers_dir}/cats/CEERS_NIRCam{pointing}_v{version}'
 
-            catalogue_filename = f'{catalogue_id}.h5'
+            catalogue_filename = f'{catalogue_id}-high-z.v0.1.h5'
 
             spurious_list = list(np.loadtxt(f'{catalogue_id}-spurious.dat', dtype=int))
 
@@ -32,7 +31,6 @@ if __name__ == '__main__':
             with h5py.File(catalogue_filename, 'a') as hf:
 
                 # hf.visit(print)
-
                 spurious_ids = [list(hf['photom/ID'][:]).index(id) for id in spurious_list]
 
                 if 'spurious' in hf.keys():

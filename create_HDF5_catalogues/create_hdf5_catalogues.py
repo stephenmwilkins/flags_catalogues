@@ -7,11 +7,8 @@ from create_subcatalogue import create_subcatalogue
 from update_spurious import update_spurious
 from selection_criteria import CEERS, NGDEEP
 
-surveys = ['CEERS', 'NGDEEP']
+surveys = ['CEERS']#, 'NGDEEP']
 survey_info = {'CEERS':['0.51.2', np.arange(1,11)], 'NGDEEP':['0.1', [1]]}
-
-#surveys = ['NGDEEP']
-#survey_info = {'NGDEEP':['0.1', [1]]}
 
 for survey in surveys:
     print(survey)

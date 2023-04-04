@@ -13,7 +13,7 @@ plt.style.use('http://stephenwilkins.co.uk/matplotlibrc.txt')
 import pandas as pd
 from astropy.table import Table
 from astropy.io import ascii, fits
-from synthesizer.filters import SVOFilterCollection
+from synthesizer.filters import FilterCollection
 import pysep.sep as sep
 import pysep.utils
 import pysep.plots.image
@@ -58,10 +58,10 @@ def create_significance_plots(hf, img, output_dir = None, N = None):
 if __name__ == '__main__':
 
 
-    ceers_dir = '/Users/stephenwilkins/Dropbox/Research/data/images/jwst/ceers'  # this should be replaced by an environment variable or similar
+    ceers_dir = '/Users/jt458/ceers'  # this should be replaced by an environment variable or similar
 
-    pointings = [1]
-    versions = ['0.2']
+    pointings = [4]
+    versions = ['0.51.2']
     N = 10 # testing purposes
 
     detection_filter = 'f200w' # should replace by a stacked detection image

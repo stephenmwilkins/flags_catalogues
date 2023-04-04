@@ -14,7 +14,8 @@ def create_detection_image(pointing, version, add_sources=False):
 
     norm = mpl.colors.Normalize(vmin=0., vmax=10.)
 
-    image_filename = f'{ceers_dir}/images/{version}/ceers_nircam{pointing}_detect_277-356_sci.fits'
+    image_filename = f'{ceers_dir}/images/detect{pointing}_277-356_sci_v{version}.fits'
+    #image_filename = f'{ceers_dir}/images/{version}/ceers_nircam{pointing}_detect_277-356_sci.fits'
 
     hdu = fits.open(image_filename)
 
@@ -50,14 +51,17 @@ def create_detection_image(pointing, version, add_sources=False):
             # b = photom['B_IMAGE'][:]
             # theta = photom['THETA_IMAGE'][:]
             # radius = photom['KRON_RADIUS'][:]
-            area = photom['ISOAREA_IMAGE'][:]
+            #area = photom['ISOAREA_IMAGE'][:]
+            size = [5]*len(z)
 
-        print(np.min(area), np.max(area))
-
+        #print(np.min(area), np.max(area))
+        
+        '''
         minsize = 2.
         size = np.sqrt(area)
         size[size < minsize] = minsize
         size[~np.isfinite(size)] = minsize
+        '''
         zcolor = zcmap(norm(z))
 
         ax.scatter(x, y, size, facecolors='none', marker='o',
@@ -79,20 +83,20 @@ def create_detection_image(pointing, version, add_sources=False):
     if add_sources:
 
         fig.savefig(
-            f'{ceers_dir}/myimages/{version}/ceers_nircam{pointing}_detect_with-sources.png')
+            f'{ceers_dir}/myimages/ceers_nircam{pointing}_detect_with-sources_v{version}.png')
 
     if not add_sources:
 
-        fig.savefig(f'{ceers_dir}{version}/myimages/ceers_nircam{pointing}_detect.png')
+        fig.savefig(f'{ceers_dir}/myimages/ceers_nircam{pointing}_detect_v{version}.png')
 
 
 if __name__ == '__main__':
 
     # this should be replaced by an environment variable or similar
-    ceers_dir = '/Users/stephenwilkins/Dropbox/Research/data/images/jwst/ceers'
+    ceers_dir = '/Users/jt458/ceers'
 
-    pointings = [2, 3, 6]
-    versions = ['0.2']
+    pointings = [4]
+    versions = ['0.51.2']
 
     for pointing in pointings:
         for version in versions:
