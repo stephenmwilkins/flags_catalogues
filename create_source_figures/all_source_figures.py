@@ -18,7 +18,7 @@ import pysep.analyse
 from create_sed_plot import create_sed_plot
 from create_pz_plot import create_pz_plot
 from create_multiband_image import create_multiband_image
-from create_significance_plots import create_significance_plots
+from create_significance_images import create_significance_images
 from create_multi_image import create_multi_image
 from create_image_cutouts import create_image_cutouts
 
@@ -27,7 +27,9 @@ if __name__ == '__main__':
     subcat = 'high-z.v0.1'
     survey = 'CEERS'
     pointing = 4
-    version = '0.51.2'
+    cat_version = '0.51.2'
+    img_version = '0.51'
+    survey_dir = '/Users/jt458/ceers'
 
 
     filters = []
@@ -39,9 +41,9 @@ if __name__ == '__main__':
 
     detection_filter = 'f200w' # should replace by a stacked detection image
 
-    create_sed_plot(survey, version, pointing, filters = filters, subcat = subcat)
-    create_pz_plot(survey, version, pointing, subcat = subcat)
-    #create_multiband_image(survey, version, pointing, filters = img_filters, subcat = subcat)
-    create_significance_plots(survey, version, pointing, detection_filter, subcat = subcat)
-    create_multi_image(survey, version, pointing, img_filters, subcat = subcat)
-    create_image_cutouts(survey, version, pointing, img_filters, subcat = subcat)
+    create_sed_plot(survey, cat_version, pointing, filters = filters, subcat = subcat, survey_dir=survey_dir)
+    create_pz_plot(survey, cat_version, pointing, subcat = subcat, survey_dir=survey_dir)
+    #create_multiband_image(survey, img_version, pointing, filters = img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
+    create_significance_images(survey, img_version, pointing, detection_filter, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
+    create_multi_image(survey, img_version, pointing, img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
+    create_image_cutouts(survey, img_version, pointing, img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)

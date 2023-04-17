@@ -8,27 +8,29 @@ import matplotlib.cm as cm
 import numpy as np
 import h5py
 
-def create_multi_image(survey, version, pointing, filters, size=50, subcat = None, N=None):
+def create_multi_image(survey, img_version, pointing, filters, cat_version = None, size=50, subcat = None, survey_dir = '', N=None):
     """ create a single image from a set of images  """
 
+    if cat_version == None:
+        cat_version = img_version
+
     survey = survey.upper()
-    survey_dir = f'/Users/jt458/{survey.lower()}'
 
     filters_ = [f.split('.')[-1].lower() for f in filters]
 
     imgs = {f: Image.open(
-        f'{survey_dir}/myimages/{survey.lower()}_nircam{pointing}_{f}_v{version}.png') for f in filters_}
+        f'{survey_dir}/myimages/{survey.lower()}_nircam{pointing}_{f}_v{img_version}.png') for f in filters_}
 
     imgs2 = {}
     imgs2['detection'] = Image.open(
-        f'{survey_dir}/myimages/{survey.lower()}_nircam{pointing}_v{version}_detect_with-sources.png')
+        f'{survey_dir}/myimages/{survey.lower()}_nircam{pointing}_v{img_version}_detect_with-sources.png')
     imgs2['segmentation'] = Image.open(
-        f'{survey_dir}/myimages/{survey.lower()}_nircam{pointing}_v{version}_segmap.png')
+        f'{survey_dir}/myimages/{survey.lower()}_nircam{pointing}_v{img_version}_segmap.png')
     
-    output_dir = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{version}'
+    output_dir = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{cat_version}'
     Path(output_dir).mkdir(parents=True, exist_ok=True)
     
-    cat_filename = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{version}'
+    cat_filename = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{cat_version}'
     if subcat != None:
         cat_filename += f'-{subcat}'
 
@@ -76,5 +78,4 @@ def create_multi_image(survey, version, pointing, filters, size=50, subcat = Non
                 # ax.set_axis_off()
 
             fn = f'{output_dir}/cutout_{id}.png'
-            print(fn)
             fig.savefig(fn, dpi=size)

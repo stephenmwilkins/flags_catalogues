@@ -9,15 +9,14 @@ import h5py
 
 plt.style.use('http://stephenwilkins.co.uk/matplotlibrc.txt')
 
-def create_pz_plot(survey, version, pointing, pz_types = None, subcat = None, N = None):
+def create_pz_plot(survey, cat_version, pointing, pz_types = None, subcat = None, survey_dir = '', N = None):
 
     survey = survey.upper()
-    survey_dir = f'/Users/jt458/{survey.lower()}'
 
-    output_dir = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{version}'
+    output_dir = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{cat_version}'
     Path(output_dir).mkdir(parents=True, exist_ok=True)
 
-    output_filename = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{version}'
+    output_filename = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{cat_version}'
     if subcat != None:
         output_filename += f'-{subcat}'
 
@@ -55,5 +54,4 @@ def create_pz_plot(survey, version, pointing, pz_types = None, subcat = None, N 
             ax.set_xlabel(r'$\rm z $')
 
             fn = f'{output_dir}/pz_{id}.png'
-            print(fn)
             fig.savefig(fn)

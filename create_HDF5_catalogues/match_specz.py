@@ -1,68 +1,80 @@
-
+import glob
 
 import numpy as np
 import h5py
 from astropy.io import ascii
+from astropy.table import Table
+from astropy.io import ascii
 
-def match_specz(survey, version, pointing, tolerance_arcsec = 0.15):
-    '''Match to a spectroscopic redshift catalogue based on some arcsecond tolerance'''
+
+# Seems to be an issue with IDs.
+
+def match_specz(survey, cat_version, pointing, tolerance_arcsec = 0.15, survey_dir = ''):
+    '''Match to an external spectroscopic redshift catalogue based on some arcsecond tolerance'''
 
     survey = survey.upper()
-    survey_dir = f'/Users/jt458/{survey.lower()}'
 
     tolerance_deg = tolerance_arcsec/3600.
 
-    # --- specz catalogue #TODO Maybe change this to read in a more common file type (fits).
-    specz_catalogue_name = f'{survey_dir}/cats/egs_specz_0822.ascii'
-    specz_catalogue = ascii.read(specz_catalogue_name)
+    # Load in external catalogues.
+    catalogue_files = glob.glob(f'{survey_dir}/external_cats/specz/*')
+    catalogue_names = [c.split('/')[-1].split('.')[0] for c in catalogue_files]
+    catalogues = {}
 
-    catalogue_id = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{version}'
+    for catalogue_name, catalogue_file in zip(catalogue_names, catalogue_files):
 
+        catalogues[catalogue_name] = Table.read(catalogue_file)
+
+    # Load the survey catalogue.
+    catalogue_id = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{cat_version}'
     catalogue_filename = f'{catalogue_id}.h5'
-
     with h5py.File(catalogue_filename, 'a') as hf:
 
         ids = hf['photom/ID'][:]
         N = len(ids)
 
-        # Create a general 'z' dataset. This will store the best available redshift.
-        if 'specz' in hf.keys():
-            del hf['z']
-
-        hf.create_dataset('z', data=hf[f'pz/{survey.lower()}/ZA'][:])  # best redshift
-        z = hf['z']
-
-        # Create dataset to store spectroscopic redshifts.
-        if 'specz' in hf.keys():
-            del hf['specz']
-
-        specz = hf.create_group('specz')
-        for k in ['z', 'quality']:
-            specz.create_dataset(k, data=np.full(N, -1)) # Default value is -1 for an object with no spectroscopic confirmation.
-        specz.create_dataset('catalogue', data=np.full(N, 'N',dtype='S10')) # Indicate the catalogue the redshift originates from.
-
-        # Calculate separations.
         ra = hf['photom/RA'][:]
         dec = hf['photom/DEC'][:]
 
-        for i in range(len(specz_catalogue['ra'])):
+        # Create a group for storing information from the matached catalogues.
+        if 'specz' in hf.keys():
+            del hf['specz']
+            del hf['z']
 
-            r = np.sqrt((ra-specz_catalogue['ra'][i])**2 +
-                        (dec-specz_catalogue['dec'][i])**2)
+        specz = hf.create_group('specz')
 
-            j = np.argmin(r)
+        # Data set storing the best available redshift for a given source.
+        hf.create_dataset('z', data=hf[f'pz/{survey.lower()}/ZA'][:])
+        z = hf['z']
 
-            # For objects within the given tolerance, save the spectroscopic redshift information.
-            if r[j] < tolerance_deg:
-                print(
-                    f"{ids[j]} {specz_catalogue['z'][i]:.2f} {hf[f'pz/{survey.lower()}/ZA'][j]:.2f} | {hf[f'pz/{survey.lower()}/ZA'][j]-specz_catalogue['z'][i]:.2f}")
+        for catalogue_name in catalogue_names:
 
-                for k in ['z', 'quality', 'catalogue']:
-                    specz[k][j] = specz_catalogue[k][i]
+            ecat = catalogues[catalogue_name]
+
+            # Create a group within the matched group for each individual catalogue.
+            specz_ = specz.create_group(catalogue_name)
+            specz_.create_dataset('z', data=np.full(N, -1, dtype = 'float')) # Dataset storing the redshift from that catalogue, -1 if no match.
+            if 'id' in ecat.colnames:
+                specz_.create_dataset('id', data=np.full(N, 'N', dtype='S10')) # The object id in that catalogue, 'N' if no match.
+            if 'quality' in ecat.colnames:
+                specz_.create_dataset('quality', data=np.full(N, 'N', dtype='S10'))
+
+            # Loop over every galaxy in the base catalogue and check if its in the external catalogue.
+            for i, (ra_, dec_) in enumerate(zip(ra, dec)):
+
+                r = np.sqrt((ra_ - ecat['ra'].value)**2 +
+                            (dec_ - ecat['dec'].value)**2)
+
+                j = np.argmin(r)
+
+                # Add to matched if within the given tolerance.
+                if r[j] < tolerance_deg:
+                    print(
+                        f"{ids[i]} {ecat['z'][j]:.2f} {hf[f'pz/{survey.lower()}/ZA'][i]:.2f} | {hf[f'pz/{survey.lower()}/ZA'][i]-ecat['z'][j]:.2f}")
+
+                    for k in list(specz_.keys()):
+                        specz_[k][i] = ecat[k][j]
 
         # Add spectroscopic redshifts to best redshift dataset.
-        sz = specz['z'][:] > 0
-        z[sz] = specz['z'][sz]
-
-        hf.flush()
-        hf.visit(print)
+            sz = specz_['z'][:] > -1
+            z[sz] = specz_['z'][sz]

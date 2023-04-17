@@ -16,20 +16,22 @@ import pysep.utils
 import pysep.plots.image
 import pysep.analyse
 
-def create_multiband_image(survey, version, pointing, filters, subcat = None, size = 50, N = None):
+def create_multiband_image(survey, img_version, pointing, filters, cat_version = None, subcat = None, size = 50, survey_dir = '', N = None):
+
+    if cat_version == None:
+        cat_version = img_version
 
     survey = survey.upper()
-    survey_dir = f'/Users/jt458/{survey.lower()}'
 
-    output_dir = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{version}'
+    output_dir = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{cat_version}'
     Path(output_dir).mkdir(parents=True, exist_ok=True)
 
-    output_filename = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{version}'
+    output_filename = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{cat_version}'
     if subcat != None:
         output_filename += f'-{subcat}'
 
     filters_ = [f.split('.')[-1].lower() for f in filters]
-    imgs = {f: pysep.utils.ImageFromMultiFITS(f'{survey_dir}/images/{survey.lower()}_nircam{pointing}_{f}_v{version}_i2d.fits') for f in filters_}
+    imgs = {f: pysep.utils.ImageFromMultiFITS(f'{survey_dir}/images/{survey.lower()}_nircam{pointing}_{f}_v{img_version}_i2d.fits') for f in filters_}
 
     with h5py.File(output_filename+'.h5','r') as hf:
 
@@ -51,8 +53,7 @@ def create_multiband_image(survey, version, pointing, filters, subcat = None, si
             cutouts = [imgs[f].make_cutout(y, x, size).data for f in ['f115w', 'f150w', 'f200w', 'f277w', 'f356w', 'f410m', 'f444w']]
             fig, ax = pysep.plots.image.make_images_plot(cutouts) # --- plot the cutout science image # TODO: add better scaling
 
-            fn = f'{output_dir}/cutout_{id}.png'
-            print(fn)
+            fn = f'{output_dir}/multiband_cutout_{id}.png'
             fig.savefig(fn)
 
 #filters = []

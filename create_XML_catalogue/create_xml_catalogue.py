@@ -8,12 +8,11 @@ from astropy.io import ascii, fits
 
 
 
-def create_xml_catalogue(survey, version, pointing, subcat = None):
+def create_xml_catalogue(survey, cat_version, pointing, subcat = None, survey_dir = ''):
 
     survey = survey.upper()
-    survey_dir = f'/Users/jt458/{survey.lower()}'
 
-    filename = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{version}'
+    filename = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{cat_version}'
     if subcat != None:
         filename += f'-{subcat}'
 
@@ -41,4 +40,4 @@ def create_xml_catalogue(survey, version, pointing, subcat = None):
     with open(f'{filename}.xml', 'w') as f:
         f.writelines(xml)
 
-create_xml_catalogue('CEERS', '0.51.2', 4, subcat = 'high-z.v0.1')
+#create_xml_catalogue('CEERS', '0.51.2', 4, subcat = 'high-z.v0.1')

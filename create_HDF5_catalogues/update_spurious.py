@@ -1,17 +1,16 @@
 import numpy as np
 import h5py
 
-def update_spurious(survey, version, pointing):
+def update_spurious(survey, cat_version, pointing, survey_dir = ''):
     '''
     Create or update a dataset indicating which objects have been identified as spurious.
     '''
     survey = survey.upper()
-    survey_dir = f'/Users/jt458/{survey.lower()}'
 
     print('-'*30)
     print(pointing)
 
-    catalogue_id = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{version}'
+    catalogue_id = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{cat_version}'
 
     catalogue_filename = f'{catalogue_id}.h5'
 

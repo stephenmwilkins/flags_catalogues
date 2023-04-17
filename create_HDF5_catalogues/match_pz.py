@@ -7,17 +7,15 @@ from astropy.table import Table
 
 # Seems to be an issue with IDs.
 
-def match_pz(survey, version, pointing, tolerance_arcsec = 0.15):
-    '''Match to a photometric catalogue based on some arcsecond tolerance'''
-
+def match_pz(survey, cat_version, pointing, tolerance_arcsec = 0.15, survey_dir = ''):
+    '''Match to an external photometric redshift catalogue based on some arcsecond tolerance'''
 
     survey = survey.upper()
-    survey_dir = f'/Users/jt458/{survey.lower()}'
 
     tolerance_deg = tolerance_arcsec/3600.
 
     # Load in external catalogues.
-    catalogue_files = glob.glob(f'{survey_dir}/external_cats/pz/*.ecsv')
+    catalogue_files = glob.glob(f'{survey_dir}/external_cats/pz/*')
     catalogue_names = [c.split('/')[-1].split('.')[0] for c in catalogue_files]
     catalogues = {}
 
@@ -25,9 +23,9 @@ def match_pz(survey, version, pointing, tolerance_arcsec = 0.15):
 
         catalogues[catalogue_name] = Table.read(catalogue_file)
 
-    catalogue_id = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{version}'
+    # Load the survey catalogue.
+    catalogue_id = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{cat_version}'
     catalogue_filename = f'{catalogue_id}.h5'
-
     with h5py.File(catalogue_filename, 'a') as hf:
 
         ids = hf['photom/ID'][:]
@@ -44,18 +42,15 @@ def match_pz(survey, version, pointing, tolerance_arcsec = 0.15):
 
         for catalogue_name in catalogue_names:
 
-            print('-'*10, catalogue_name)
-
             ecat = catalogues[catalogue_name]
 
             # Create a group within the matched group for each individual catalogue.
             matched_ = matched.create_group(catalogue_name)
-            matched_.create_dataset('z', data=np.full(N, -1)) # Dataset storing the redshift from that catalogue. -1 if no match.
-            matched_.create_dataset('id', data=np.full(N, 'N', dtype='S10')) # The object id in that catalogue. #! Issue with this at the moment?
+            matched_.create_dataset('z', data=np.full(N, -1, dtype = 'float')) # Dataset storing the redshift from that catalogue, -1 if no match.
+            matched_.create_dataset('id', data=np.full(N, 'N', dtype='S10')) # The object id in that catalogue, 'N' if no match.
 
-            # Loop over every galaxy in the base catalogue and check if its in the external catalogue
+            # Loop over every galaxy in the base catalogue and check if its in the external catalogue.
             for i, (ra_, dec_) in enumerate(zip(ra, dec)):
-
 
                 r = np.sqrt((ra_ - ecat['ra'].value)**2 +
                             (dec_ - ecat['dec'].value)**2)

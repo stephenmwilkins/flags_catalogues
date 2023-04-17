@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
             catalogue_id = f'{ceers_dir}/cats/CEERS_NIRCam{pointing}_v{version}'
 
-            catalogue_filename = f'{catalogue_id}-high-z.v0.1.h5'
+            catalogue_filename = f'{catalogue_id}.h5'
 
             spurious_list = list(np.loadtxt(f'{catalogue_id}-spurious.dat', dtype=int))
 
