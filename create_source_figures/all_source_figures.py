@@ -43,7 +43,7 @@ if __name__ == '__main__':
 
     create_sed_plot(survey, cat_version, pointing, filters = filters, subcat = subcat, survey_dir=survey_dir)
     create_pz_plot(survey, cat_version, pointing, subcat = subcat, survey_dir=survey_dir)
-    #create_multiband_image(survey, img_version, pointing, filters = img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
+    create_multiband_image(survey, img_version, pointing, filters = img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
     create_significance_images(survey, img_version, pointing, detection_filter, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
     create_multi_image(survey, img_version, pointing, img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
     create_image_cutouts(survey, img_version, pointing, img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)

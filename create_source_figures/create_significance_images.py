@@ -23,41 +23,46 @@ import pysep.analyse
 
 def create_significance_images(survey, img_version, pointing, detection_filter, cat_version = None, subcat = None, survey_dir = '', N = None):
 
+    # Should the same catalogue and image versions be used?
     if cat_version == None:
         cat_version = img_version
 
     survey = survey.upper()
 
-    if survey_dir == None:
-        survey_dir = f'/Users/jt458/{survey.lower()}'
-
+    # Save the images here.
     output_dir = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{cat_version}'
     Path(output_dir).mkdir(parents=True, exist_ok=True)
 
-    output_filename = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{cat_version}'
+    # Catalogue to use.
+    cat_filename = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{cat_version}'
     if subcat != None:
-        output_filename += f'-{subcat}'
+        cat_filename += f'-{subcat}'
 
+    # Load the image in the detection band.
     detection_filter = detection_filter.lower()
-
     img = pysep.utils.ImageFromMultiFITS(f'{survey_dir}/images/{survey.lower()}_nircam{pointing}_{detection_filter}_v{img_version}_i2d.fits')
-    img.measure_background_map() # required
     
-    with h5py.File(output_filename+'.h5','r') as hf:
+    # Measure background using pysep.
+    img.measure_background_map()
+    
+    with h5py.File(cat_filename+'.h5','r') as hf:
 
-        # --- select phtometry group
+        # Select phtometry group
         photom = hf['photom']
 
+        # Useful for testing.   
         if N:
-            ids = photom['ID'][:N] # useful for testing
+            ids = photom['ID'][:N]
         else:
             ids = photom['ID'][:]
 
         for i, id in enumerate(ids):
 
+            # X and Y position of source.
             x = photom['X'][i]
             y = photom['Y'][i]
 
+            # Make narrow and wide significance plots with pysep.
             cutout = img.make_cutout(y, x, 50)
 
             fig, ax = pysep.plots.image.make_significance_plot(cutout)
@@ -72,3 +77,4 @@ def create_significance_images(survey, img_version, pointing, detection_filter, 
 
             fn = f'{output_dir}/wide_significance_{id}.png'
             fig.savefig(fn)
+            plt.close()

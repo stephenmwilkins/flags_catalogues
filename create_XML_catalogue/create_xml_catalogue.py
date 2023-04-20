@@ -12,19 +12,19 @@ def create_xml_catalogue(survey, cat_version, pointing, subcat = None, survey_di
 
     survey = survey.upper()
 
+    # Catalogue to use.
     filename = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{cat_version}'
     if subcat != None:
         filename += f'-{subcat}'
 
-    # open HDF5 catalogue
     d = {}
-
     with h5py.File(filename+'.h5', 'r') as hf:
 
         # print(hf.visit(print))
 
         sh = hf['photom/ID'][:].shape
 
+        # Copy the data to a dictionary.
         def add_to_dict(name, item):
             if isinstance(item, h5py.Dataset):
                 if item[:].shape == sh:
@@ -33,11 +33,13 @@ def create_xml_catalogue(survey, cat_version, pointing, subcat = None, survey_di
 
         hf.visititems(add_to_dict)
 
+    # Convert to pandas dataframe and then to XML.
     df = pd.DataFrame(d)
 
     xml = df.to_xml(parser='etree')
 
+    # Write to XML.
     with open(f'{filename}.xml', 'w') as f:
         f.writelines(xml)
 
-#create_xml_catalogue('CEERS', '0.51.2', 4, subcat = 'high-z.v0.1')
+create_xml_catalogue('CEERS', '0.51.2', 4, subcat = 'high-z.v0.1')

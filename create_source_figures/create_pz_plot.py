@@ -13,28 +13,33 @@ def create_pz_plot(survey, cat_version, pointing, pz_types = None, subcat = None
 
     survey = survey.upper()
 
+    # Save the images here.
     output_dir = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{cat_version}'
     Path(output_dir).mkdir(parents=True, exist_ok=True)
 
-    output_filename = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{cat_version}'
+    # Catalogue to use.
+    cat_filename = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{cat_version}'
     if subcat != None:
-        output_filename += f'-{subcat}'
+        cat_filename += f'-{subcat}'
 
+    # The P(z) estimates to be used. If none given use the default survey values.
     if pz_types == None:
         pz_types = [survey.lower()]
 
-    with h5py.File(output_filename+'.h5','r') as hf:
+    with h5py.File(cat_filename+'.h5','r') as hf:
 
-        # --- select phtometry group
+        # Select phtometry group
         photom = hf['photom']
 
+        # Useful for testing.
         if N:
-            ids = photom['ID'][:N] # useful for testing
+            ids = photom['ID'][:N]
         else:
             ids = photom['ID'][:]
 
         for i, id in enumerate(ids):
 
+            # Figure properties.
             fig = plt.figure(figsize = (3.5, 2.5))
 
             left  = 0.2
@@ -44,6 +49,7 @@ def create_pz_plot(survey, cat_version, pointing, pz_types = None, subcat = None
 
             ax = fig.add_axes((left, bottom, width, height))  
 
+            # Plot the full P(z) for each of the different estimates.
             for pz_type, ls in zip(pz_types, ['-','-.','--',':']):
 
                 pz = hf[f'pz/{pz_type}']
@@ -55,3 +61,4 @@ def create_pz_plot(survey, cat_version, pointing, pz_types = None, subcat = None
 
             fn = f'{output_dir}/pz_{id}.png'
             fig.savefig(fn)
+            plt.close()
