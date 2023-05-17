@@ -22,9 +22,9 @@ def create_single_band_image(survey, img_version, pointing, filters, survey_dir 
         filter_ = filter.split('.')[-1].lower()
 
         # Load background subtracted image file.
-        image_filename = f'{survey_dir}/images/{survey.lower()}_nircam{pointing}_{filter_}_sci_bkgsub_v{img_version}.fits'
+        image_filename = f'{survey_dir}/images/{survey.lower()}_nircam{pointing}_{filter_}_v{img_version}_mbkgsub1.fits'
         hdu = fits.open(image_filename)
-        image = hdu[0].data 
+        image = hdu[1].data 
 
         # Define threshold for switching between the two colour maps.
         threshold = -np.percentile(image[image < 0.0], 0.32)

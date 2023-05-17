@@ -10,11 +10,11 @@ import matplotlib.patheffects as pe
 from matplotlib.collections import EllipseCollection
 
 
-def create_segmentation_image(pointing, version, add_sources=False):
+def create_segmentation_image(pointing, img_version, add_sources=False):
 
     # norm = mpl.colors.Normalize(vmin=0., vmax=10.)
 
-    image_filename = f'{ceers_dir}/images/ceers_nircam{pointing}_segmap_v{version}.fits'
+    image_filename = f'{ceers_dir}/images/ceers_nircam{pointing}_segmap_v{img_version}.fits'
 
     hdu = fits.open(image_filename)
 

@@ -26,7 +26,8 @@ if __name__ == '__main__':
 
     subcat = 'high-z.v0.1'
     survey = 'CEERS'
-    pointing = 4
+    pointingJ = []
+    pointingD = [7,8,9,10]
     cat_version = '0.51.2'
     img_version = '0.51'
     survey_dir = '/Users/jt458/ceers'
@@ -41,9 +42,19 @@ if __name__ == '__main__':
 
     detection_filter = 'f200w' # should replace by a stacked detection image
 
-    create_sed_plot(survey, cat_version, pointing, filters = filters, subcat = subcat, survey_dir=survey_dir)
-    create_pz_plot(survey, cat_version, pointing, subcat = subcat, survey_dir=survey_dir)
-    create_multiband_image(survey, img_version, pointing, filters = img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
-    create_significance_images(survey, img_version, pointing, detection_filter, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
-    create_multi_image(survey, img_version, pointing, img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
-    create_image_cutouts(survey, img_version, pointing, img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
+    for pointing in pointingJ:
+        print(pointing)
+        create_sed_plot(survey, cat_version, pointing, filters = filters, subcat = subcat, survey_dir=survey_dir)
+        create_pz_plot(survey, cat_version, pointing, subcat = subcat, survey_dir=survey_dir)
+        #create_multiband_image(survey, 0.2, pointing, filters = img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
+        create_significance_images(survey, 0.2, pointing, detection_filter, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
+        create_multi_image(survey, 0.2, pointing, img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
+        create_image_cutouts(survey, 0.2, pointing, img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
+    for pointing in pointingD:
+        print(pointing)
+        create_sed_plot(survey, cat_version, pointing, filters = filters, subcat = subcat, survey_dir=survey_dir)
+        create_pz_plot(survey, cat_version, pointing, subcat = subcat, survey_dir=survey_dir)
+        #create_multiband_image(survey, img_version, pointing, filters = img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
+        create_significance_images(survey, img_version, pointing, detection_filter, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
+        create_multi_image(survey, img_version, pointing, img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
+        create_image_cutouts(survey, img_version, pointing, img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)

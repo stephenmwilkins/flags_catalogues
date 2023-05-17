@@ -10,12 +10,12 @@ def update_spurious(survey, cat_version, pointing, survey_dir = ''):
     print('-'*30)
     print(pointing)
 
-    catalogue_id = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{cat_version}'
-
-    catalogue_filename = f'{catalogue_id}.h5'
-
     # Load in external file with list of spurious objects. Text file with each spurious id on a new line.
     spurious_list = list(np.loadtxt(f'{catalogue_id}-spurious.dat', dtype=int))
+
+    # Load catalogue.
+    catalogue_id = f'{survey_dir}/cats/{survey}_NIRCam{pointing}_v{cat_version}'
+    catalogue_filename = f'{catalogue_id}.h5'
 
     with h5py.File(catalogue_filename, 'a') as hf:
 
@@ -23,6 +23,7 @@ def update_spurious(survey, cat_version, pointing, survey_dir = ''):
 
         if 'spurious' in hf.keys():
             del hf['spurious']
+            
         # True if spurious.
         hf['spurious'] = np.zeros(len(hf['photom/ID'][:]))
         hf['spurious'][spurious_ids] = 1

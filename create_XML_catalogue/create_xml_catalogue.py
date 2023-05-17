@@ -42,4 +42,6 @@ def create_xml_catalogue(survey, cat_version, pointing, subcat = None, survey_di
     with open(f'{filename}.xml', 'w') as f:
         f.writelines(xml)
 
-create_xml_catalogue('CEERS', '0.51.2', 4, subcat = 'high-z.v0.1')
+pointings = np.arange(1,11)
+for pointing in pointings:
+    create_xml_catalogue('CEERS', '0.51.2', pointing, subcat = 'high-z.v0.1', survey_dir='/Users/jt458/ceers')

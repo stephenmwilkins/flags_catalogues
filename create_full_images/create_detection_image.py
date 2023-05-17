@@ -56,6 +56,7 @@ def create_detection_image(survey, img_version, pointing, cat_version = None, ad
             photom = hf['photom']
             x = photom['X'][:]
             y = photom['Y'][:]
+            #TODO Replace when ISOAREA_IMAGE is available.
             # a = photom['A_IMAGE'][:]
             # b = photom['B_IMAGE'][:]
             # theta = photom['THETA_IMAGE'][:]
@@ -75,12 +76,6 @@ def create_detection_image(survey, img_version, pointing, cat_version = None, ad
         zcolor = zcmap(norm(z))
         ax.scatter(x, y, size, facecolors='none', marker='o',
                    edgecolors=zcolor, linewidth=0.3, alpha=0.7)
-
-        # X, Y = np.meshgrid(x, y)
-        # XY = np.column_stack((X.ravel(), Y.ravel()))
-        # ec = EllipseCollection(a, b, theta, units='x', offsets=XY)
-        # ec.set_array((X + Y).ravel())
-        # ax.add_collection(ec)
 
         # Add redshift labels
         for i in range(len(size)):

@@ -6,7 +6,7 @@ if __name__ == '__main__':
 
     subcat = 'high-z.v0.1'
     survey = 'CEERS'
-    pointing = 4
+    pointing = 5
     cat_version = '0.51.2'
     img_version = '0.51'
     survey_dir = '/Users/jt458/ceers'
