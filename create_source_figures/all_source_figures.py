@@ -24,11 +24,11 @@ from create_image_cutouts import create_image_cutouts
 
 if __name__ == '__main__':
 
-    subcat = 'high-z.v0.1'
+    subcat = 'CEERS_colours_v3'
     survey = 'CEERS'
-    pointingJ = []
-    pointingD = [7,8,9,10]
-    cat_version = '0.51.2'
+    pointingJ = [1,2,3,6]
+    pointingD = [4,5,7,8,9,10]
+    cat_version = '0.51.3'
     img_version = '0.51'
     survey_dir = '/Users/jt458/ceers'
 

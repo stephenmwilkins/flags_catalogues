@@ -81,3 +81,23 @@ def create_image_cutouts(survey, img_version, pointing, filters, cat_version = N
                 fn = f'{output_dir}/{img_name}_{id}.png'
                 fig.savefig(fn)
                 plt.close()
+
+            for img_name, img in imgs2.items():
+
+                # Figure properties based on X and Y position of source.
+                fig = plt.figure(figsize=(1, 1), dpi=size)
+                ax = fig.add_axes((0.0, 0.0, 1., 1.))
+                left = int(x-size/2)
+                upper = int(img.size[1]-y-size/2)
+                right = int(x+size/2)
+                lower = int(img.size[1]-y+size/2)
+
+                # Crop and plot the image to create cutout.
+                cutout = img.crop((left, upper, right, lower))
+                ax.imshow(cutout)
+
+                ax.set_axis_off()
+
+                fn = f'{output_dir}/{img_name}_{id}.png'
+                fig.savefig(fn)
+                plt.close()

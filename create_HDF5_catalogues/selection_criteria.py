@@ -29,20 +29,32 @@ class CEERS:
             ('nd_det', op.gt, 2),
             ('nd_opt3', op.eq, 0),
         ]
-        self.criteria['high-z.v0.1'] = [
-            ('photom/FLUX_277', op.gt, m_to_flux(28.5)),
+        self.criteria['CEERS_colours'] = [
+            ('photom/FLUX_277', op.gt, 100),
             ('pz/ceers/INT_ZGT4', op.gt, 0.9),
             ('pz/ceers/ZA', op.gt, 4.5),
             ('pz/ceers/CHIA', op.lt, 60),
             ('nd_det', op.gt, 4),
             ('nd_opt3', op.eq, 0),
         ]
+
+        self.criteria['CEERS_colours_v3'] = [
+            ('photom/FLUX_277', op.gt, 50),
+            ('pz/ceers/INT_ZGT4', op.gt, 0.9),
+            ('pz/ceers/ZA', op.gt, 4.5),
+            ('pz/ceers/CHIA', op.lt, 60),
+            ('nd_det', op.gt, 4),
+            ('nd_opt3', op.eq, 0),
+        ]
+
         # ---------------- Include calculations required for criteria here ----------------
 
         # --- calculate the signal-to-noise in each of the bands
         ai = 3  # aperture index
         sn = {f: hf['photom/FLUX_'+f+'_APER'][:, ai]/hf['photom/FLUXERR_'+f+'_APER'][:, ai]
               for f in ['606', '814', '115', '150', '200', '277', '356', '444']}
+        
+        self.cat['SN_277'] = hf['photom/FLUX_277_APER'][:, ai]/hf['photom/FLUXERR_277_APER'][:, ai]
 
         # --- calculate the number of bands where S/N>5.5
         sn_det = np.array([sn[f] > 5.5
