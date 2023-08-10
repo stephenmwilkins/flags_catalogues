@@ -69,6 +69,7 @@ def create_significance_images(survey, img_version, pointing, detection_filter, 
 
             fn = f'{output_dir}/significance_{id}.png'
             fig.savefig(fn)
+            plt.close(fig)
 
 
             cutout = img.make_cutout(y, x, 200)
@@ -77,4 +78,4 @@ def create_significance_images(survey, img_version, pointing, detection_filter, 
 
             fn = f'{output_dir}/wide_significance_{id}.png'
             fig.savefig(fn)
-            plt.close()
+            plt.close(fig)
