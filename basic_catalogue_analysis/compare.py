@@ -4,11 +4,11 @@ import numpy as np
 def compare_catalogue(new_cat, old_cat):
 
     with h5py.File(new_cat, 'r') as hf:
-        new_ID = set(hf['photom/ID'][:])
+        new_ID = list(hf['photom/ID'][:])
     with h5py.File(old_cat, 'r') as hf:
-        old_ID = set(hf['photom/ID'][:])
+        old_ID = list(hf['photom/ID'][:])
 
-    in_new = [i for i in new_ID ^ old_ID if i in new_ID]
+    in_new = [i for i in set(new_ID) ^ set(old_ID) if i in new_ID]
 
     s = []
     for i in new_ID:
