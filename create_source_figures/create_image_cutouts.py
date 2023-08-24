@@ -80,7 +80,7 @@ def create_image_cutouts(survey, img_version, pointing, filters, cat_version = N
 
                 fn = f'{output_dir}/{img_name}_{id}.png'
                 fig.savefig(fn)
-                plt.close()
+                plt.close(fig)
 
             for img_name, img in imgs2.items():
 
@@ -100,4 +100,4 @@ def create_image_cutouts(survey, img_version, pointing, filters, cat_version = N
 
                 fn = f'{output_dir}/{img_name}_{id}.png'
                 fig.savefig(fn)
-                plt.close()
+                plt.close(fig)

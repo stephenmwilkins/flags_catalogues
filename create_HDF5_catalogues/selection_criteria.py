@@ -1,7 +1,7 @@
 import numpy as np
 import h5py
 import operator as op
-from synthesizer.utils import flux_to_m, m_to_flux
+from synthesizer.utils import fnu_to_m, m_to_fnu
 
 # Define a new class for each survey with the relevant selection criteria and functions.
 
@@ -47,6 +47,15 @@ class CEERS:
             ('nd_opt3', op.eq, 0),
         ]
 
+        self.criteria['CEERS_colours_v4'] = [
+            ('photom/FLUX_277', op.gt, 50),
+            ('pz/ceers/INT_ZGT4', op.gt, 0.9),
+            ('pz/ceers/ZA', op.gt, 4.5),
+            ('pz/ceers/CHIA', op.lt, 60),
+            ('nd_det', op.gt, 4),
+            ('nd_opt2', op.eq, 0),
+        ]
+
         # ---------------- Include calculations required for criteria here ----------------
 
         # --- calculate the signal-to-noise in each of the bands
@@ -70,9 +79,10 @@ class CEERS:
         # this sums the above, i.e. True = 1, False = 0. Thus this tells us how many bands are detected at S/N>5.5
 
         # -- for galaxies at z<9 we can ignore F814W THIS NEEDS CHECKING
-        sn_opt3[1, (self.za < 8)] = 0.0
-        sn_opt3[2, (self.za < 11)] = 0.0  # -- for galaxies at z<11 we can ignore F115W
-        sn_opt3[3, (self.za < 12)] = 0.0  # -- for galaxies at z<12 we can ignore F150W
+        sn_opt3[0, (self.za < 6)] = 0.0
+        sn_opt3[1, (self.za < 7)] = 0.0
+        sn_opt3[2, (self.za < 9.9)] = 0.0  # -- for galaxies at z<11 we can ignore F115W
+        sn_opt3[3, (self.za < 13.2)] = 0.0  # -- for galaxies at z<12 we can ignore F150W
 
         self.cat['nd_opt3'] = np.sum(sn_opt3, axis=0)
 
@@ -83,9 +93,10 @@ class CEERS:
         # this sums the above, i.e. True = 1, False = 0. Thus this tells us how many bands are detected at S/N>5.5
 
         # -- for galaxies at z<9 we can ignore F814W THIS NEEDS CHECKING
-        sn_opt2[1, (self.za < 8)] = 0.0
-        sn_opt2[2, (self.za < 11)] = 0.0  # -- for galaxies at z<11 we can ignore F115W
-        sn_opt2[3, (self.za < 12)] = 0.0  # -- for galaxies at z<12 we can ignore F150W
+        sn_opt2[0, (self.za < 6)] = 0.0
+        sn_opt2[1, (self.za < 7)] = 0.0
+        sn_opt2[2, (self.za < 9.9)] = 0.0  # -- for galaxies at z<11 we can ignore F115W
+        sn_opt2[3, (self.za < 13.2)] = 0.0  # -- for galaxies at z<12 we can ignore F150W
 
         self.cat['nd_opt2'] = np.sum(sn_opt2, axis=0)
 
@@ -159,7 +170,7 @@ class NGDEEP:
         # ---------------- Define different criteria here ----------------
         self.criteria = {}
         self.criteria['high-z.v0.1'] = [
-            ('photom/FLUX_277', op.gt, m_to_flux(28.5)),
+            ('photom/FLUX_277', op.gt, m_to_fnu(28.5)),
             ('pz/ngdeep/INT_ZGT4', op.gt, 0.9),
             ('pz/ngdeep/ZA', op.gt, 4.5),
             ('pz/ngdeep/CHIA', op.lt, 60),

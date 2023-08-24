@@ -74,4 +74,4 @@ def create_sed_plot(survey, cat_version, pointing, filters, subcat = None, surve
 
             fn = f'{output_dir}/sed_{id}.png'
             fig.savefig(fn)
-            plt.close()
+            plt.close(fig)

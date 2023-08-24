@@ -10,7 +10,7 @@ from selection_criteria import CEERS, NGDEEP
 surveys = ['CEERS']#, 'NGDEEP']
 survey_info = {'CEERS':['0.51.3', np.arange(1,11)], 'NGDEEP':['0.1', [1]]}
 survey_dir = '/Users/jt458/ceers'
-code = 'high-z.v0.1'
+code = 'CEERS_colours_v4'
 
 # Generate the first set of catalogues.
 for survey in surveys:

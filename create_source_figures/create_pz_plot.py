@@ -61,4 +61,4 @@ def create_pz_plot(survey, cat_version, pointing, pz_types = None, subcat = None
 
             fn = f'{output_dir}/pz_{id}.png'
             fig.savefig(fn)
-            plt.close()
+            plt.close(fig)

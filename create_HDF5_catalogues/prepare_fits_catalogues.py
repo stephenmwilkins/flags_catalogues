@@ -58,6 +58,6 @@ if __name__ == '__main__':
 
     ceers_dir = '/Users/jt458/ceers'
 
-    prepare_ceers_catalogue('0.51.3', dir = ceers_dir)
+    prepare_ceers_catalogue('0.51.4', dir = ceers_dir)
 
-    prepare_ngdeep_catalogue('0.1', dir = '/Users/jt458/ngdeep')
+    #prepare_ngdeep_catalogue('0.1', dir = '/Users/jt458/ngdeep')
