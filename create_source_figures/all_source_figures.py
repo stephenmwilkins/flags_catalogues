@@ -24,7 +24,7 @@ from create_image_cutouts import create_image_cutouts
 
 if __name__ == '__main__':
 
-    subcat = 'CEERS_colours_v4-diff'
+    subcat = 'CEERS_colours_v5-diff'
     survey = 'CEERS'
     pointingJ = [1,2,3,6]
     pointingD = [4,5,7,8,9,10]
@@ -46,20 +46,13 @@ if __name__ == '__main__':
         print(pointing)
         create_sed_plot(survey, cat_version, pointing, filters = filters, subcat = subcat, survey_dir=survey_dir)
         create_pz_plot(survey, cat_version, pointing, subcat = subcat, survey_dir=survey_dir)
-        #create_multiband_image(survey, 0.2, pointing, filters = img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
         create_significance_images(survey, 0.2, pointing, detection_filter, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
         create_multi_image(survey, 0.2, pointing, img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
         create_image_cutouts(survey, 0.2, pointing, img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
     for pointing in pointingD:
         print(pointing)
-        print('----------SED----------')
         create_sed_plot(survey, cat_version, pointing, filters = filters, subcat = subcat, survey_dir=survey_dir)
-        print('----------PZ----------')
         create_pz_plot(survey, cat_version, pointing, subcat = subcat, survey_dir=survey_dir)
-        #create_multiband_image(survey, img_version, pointing, filters = img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
-        print('----------Significance----------')
         create_significance_images(survey, img_version, pointing, detection_filter, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
-        print('----------Multi-image----------')
         create_multi_image(survey, img_version, pointing, img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)
-        print('----------Cutouts----------')
         create_image_cutouts(survey, img_version, pointing, img_filters, cat_version = cat_version, subcat = subcat, survey_dir=survey_dir)

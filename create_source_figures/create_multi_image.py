@@ -92,3 +92,7 @@ def create_multi_image(survey, img_version, pointing, filters, cat_version = Non
             fn = f'{output_dir}/cutout_{id}.png'
             fig.savefig(fn, dpi=size)
             plt.close(fig)
+    for img in list(imgs.values()):
+        img.close()
+    for img in list(imgs2.values()):
+        img.close()

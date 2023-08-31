@@ -44,4 +44,4 @@ def create_xml_catalogue(survey, cat_version, pointing, subcat = None, survey_di
 
 pointings = np.arange(1,11)
 for pointing in pointings:
-    create_xml_catalogue('CEERS', '0.51.3', pointing, subcat = 'CEERS_colours_v4-diff', survey_dir='/Users/jt458/ceers')
+    create_xml_catalogue('CEERS', '0.51.3', pointing, subcat = 'CEERS_colours_v5-diff', survey_dir='/Users/jt458/ceers')

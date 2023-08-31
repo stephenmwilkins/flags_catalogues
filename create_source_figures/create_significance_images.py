@@ -79,3 +79,4 @@ def create_significance_images(survey, img_version, pointing, detection_filter, 
             fn = f'{output_dir}/wide_significance_{id}.png'
             fig.savefig(fn)
             plt.close(fig)
+    img.hdu.close()

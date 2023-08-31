@@ -59,8 +59,5 @@ def match_pz(survey, cat_version, pointing, tolerance_arcsec = 0.15, survey_dir 
 
                 # Add to matched if within the given tolerance.
                 if r[j] < tolerance_deg:
-                    print(
-                        f"{ids[i]} {ecat['id'][j]} {ecat['z'][j]:.2f} {hf[f'pz/{survey.lower()}/ZA'][i]:.2f} | {hf[f'pz/{survey.lower()}/ZA'][i]-ecat['z'][j]:.2f}")
-
                     for k in ['z', 'id']:
                         matched_[k][i] = ecat[k][j]

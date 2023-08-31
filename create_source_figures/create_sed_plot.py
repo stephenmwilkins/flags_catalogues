@@ -1,9 +1,7 @@
 
 from pathlib import Path
 import numpy as np
-import matplotlib as mpl
 import matplotlib.pyplot as plt
-import matplotlib.cm as cm
 import numpy as np
 import h5py
 
@@ -30,10 +28,7 @@ def create_sed_plot(survey, cat_version, pointing, filters, subcat = None, surve
         # Select phtometry group
         photom = hf['photom']
 
-        # if not filters:
-            #TODO --- figure out a way to automaticall get the filters. This may require using an attribute in the HDF5 file
-
-        fc = FilterCollection(filters)
+        fc = FilterCollection(filters, new_lam = np.arange(5000., 55000., 1.))
 
         # Conversion from synthesizer filter names to survey convention
         filters_ = [f.split('.')[-1][1:-1] for f in filters] 

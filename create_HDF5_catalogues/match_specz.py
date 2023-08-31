@@ -69,9 +69,6 @@ def match_specz(survey, cat_version, pointing, tolerance_arcsec = 0.15, survey_d
 
                 # Add to matched if within the given tolerance.
                 if r[j] < tolerance_deg:
-                    print(
-                        f"{ids[i]} {ecat['z'][j]:.2f} {hf[f'pz/{survey.lower()}/ZA'][i]:.2f} | {hf[f'pz/{survey.lower()}/ZA'][i]-ecat['z'][j]:.2f}")
-
                     for k in list(specz_.keys()):
                         specz_[k][i] = ecat[k][j]
 

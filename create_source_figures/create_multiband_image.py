@@ -60,4 +60,6 @@ def create_multiband_image(survey, img_version, pointing, filters, cat_version =
 
             fn = f'{output_dir}/multiband_cutout_{id}.png'
             fig.savefig(fn)
-            plt.close()
+            plt.close(fig)
+    for img in list(imgs.values()):
+        img.hdu.close()

@@ -101,3 +101,7 @@ def create_image_cutouts(survey, img_version, pointing, filters, cat_version = N
                 fn = f'{output_dir}/{img_name}_{id}.png'
                 fig.savefig(fn)
                 plt.close(fig)
+    for img in list(imgs.values()):
+        img.close()
+    for img in list(imgs2.values()):
+        img.close()

@@ -54,6 +54,7 @@ def create_pz_plot(survey, cat_version, pointing, pz_types = None, subcat = None
 
                 pz = hf[f'pz/{pz_type}']
                 ax.plot(pz['ZGRID'][:], pz['PZ'][i], lw=1, c='k', ls=ls)
+                del pz
 
 
             ax.set_ylabel(r'$\rm P(z) $')
